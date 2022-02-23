@@ -1,0 +1,46 @@
+.error {
+  color: var(--del-color);
+}
+
+.contents {
+  display: contents;
+}
+
+[role="link"] {
+  margin: 0;
+  padding: 0;
+  --color: var(--primary) !important;
+  --background-color: transparent !important;
+  --border-color: transparent !important;
+  outline: 0;
+  background-color: var(--background-color);
+  color: var(--color);
+  -webkit-text-decoration: var(--text-decoration);
+  text-decoration: var(--text-decoration);
+  transition: background-color var(--transition), color var(--transition),
+    box-shadow var(--transition), -webkit-text-decoration var(--transition);
+  transition: background-color var(--transition), color var(--transition),
+    text-decoration var(--transition), box-shadow var(--transition);
+  transition: background-color var(--transition), color var(--transition),
+    text-decoration var(--transition), box-shadow var(--transition),
+    -webkit-text-decoration var(--transition);
+}
+
+[role="link"]:focus {
+  --background-color: var(--primary-focus) !important;
+}
+
+[role="link"].contrast {
+  --color: var(--contrast) !important;
+}
+[role="link"].contrast:focus {
+  --background-color: var(--contrast-focus) !important;
+}
+
+nav [role="link"] {
+  display: block;
+  margin: calc(var(--spacing) * -1) calc(var(--spacing) * -0.5);
+  padding: var(--spacing) calc(var(--spacing) * 0.5);
+  border-radius: var(--border-radius);
+  text-decoration: none;
+}
