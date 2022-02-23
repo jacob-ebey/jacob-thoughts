@@ -11,6 +11,14 @@ app.use(compression());
 
 app.disable("x-powered-by");
 
+app.use(function (req, res, next) {
+  if (process.env.FLY_REGION && req.get("X-Forwarded-Proto") === "http") {
+    res.redirect("https://" + req.headers.host + req.url);
+  } else {
+    next();
+  }
+});
+
 app.use(
   "/build",
   express.static("public/build", { immutable: true, maxAge: "1y" })
