@@ -16,7 +16,11 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async () => {
-  let posts = await prisma.post.findMany();
+  let posts = await prisma.post.findMany({
+    orderBy: {
+      id: "desc",
+    },
+  });
 
   return json<LoaderData>({
     posts,
