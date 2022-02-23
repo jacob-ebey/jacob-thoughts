@@ -11,7 +11,7 @@ export const meta: MetaFunction = () => {
 export let links = () => [
   {
     rel: "stylesheet",
-    href: "https://unpkg.com/@picocss/pico@latest/css/pico.min.css",
+    href: "https://unpkg.com/@picocss/pico@1.4.4/css/pico.min.css",
   },
   {
     rel: "stylesheet",
