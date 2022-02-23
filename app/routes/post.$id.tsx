@@ -1,5 +1,6 @@
 import { json, redirect, useLoaderData, useSearchParams } from "remix";
 import type { ActionFunction, LoaderFunction } from "remix";
+import linkifyUrls from "linkify-urls";
 
 import { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
@@ -164,7 +165,10 @@ export default function Post() {
             <h1>{post.title}</h1>
           )}
           {post.body.split("\n").map((line, index) => (
-            <p key={line + index}>{line}</p>
+            <p
+              key={line + index}
+              dangerouslySetInnerHTML={{ __html: linkifyUrls(line) }}
+            />
           ))}
         </section>
       )}

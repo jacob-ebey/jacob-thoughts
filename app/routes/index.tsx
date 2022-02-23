@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { json, useLoaderData } from "remix";
 import type { HeadersFunction, LoaderFunction } from "remix";
+import linkifyUrls from "linkify-urls";
 
 import type { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
@@ -70,7 +71,10 @@ export default function Index() {
               </h1>
             )}
             {post.body.split("\n").map((line, index) => (
-              <p key={line + index}>{line}</p>
+              <p
+                key={line + index}
+                dangerouslySetInnerHTML={{ __html: linkifyUrls(line) }}
+              />
             ))}
           </section>
         </Fragment>
