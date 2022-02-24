@@ -2,10 +2,11 @@ import { json, Links, LiveReload, Meta, Outlet, useLoaderData } from "remix";
 import type { LoaderFunction, MetaFunction } from "remix";
 
 import { isLoggedIn } from "~/session.server";
+import { getSeoLinks, getSeoMeta } from "~/seo";
 import globalStylesHref from "~/styles/global.css";
 
 export const meta: MetaFunction = () => {
-  return { title: "Jacob Thoughts", description: "Come read my ramblings." };
+  return getSeoMeta();
 };
 
 export let links = () => [
@@ -17,6 +18,7 @@ export let links = () => [
     rel: "stylesheet",
     href: globalStylesHref,
   },
+  ...getSeoLinks(),
 ];
 
 type LoaderData = {

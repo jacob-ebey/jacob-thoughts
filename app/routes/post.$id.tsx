@@ -5,8 +5,7 @@ import linkifyUrls from "linkify-urls";
 import { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
 import { isLoggedIn } from "~/session.server";
-
-import imgHref from "~/media/phuket-pool.jpg";
+import { getSeoMeta } from "~/seo";
 
 export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
   let title = data?.post?.title || "Jacob Thoughts";
@@ -14,16 +13,10 @@ export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
     data?.post?.subtitle ||
     data?.post?.body?.split("\n")?.[0] ||
     "A post by Jacob Ebey";
-  return {
+  return getSeoMeta({
     title,
     description,
-    "twitter:title": title,
-    "twitter:description": description,
-    "twitter:image": `https://jacobeby.com${imgHref}`,
-    "twitter:card": "summary",
-    "twitter:site": "@ebey_jacob",
-    "twitter:creator": "@ebey_jacob",
-  };
+  });
 };
 
 type LoaderData = {
