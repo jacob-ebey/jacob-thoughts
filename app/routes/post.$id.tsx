@@ -7,12 +7,19 @@ import prisma from "~/prisma.server";
 import { isLoggedIn } from "~/session.server";
 
 export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
+  let title = data?.post?.title || "Jacob Thoughts";
+  let description =
+    data?.post?.subtitle ||
+    data?.post?.body?.split("\n")?.[0] ||
+    "A post by Jacob Ebey";
   return {
-    title: data?.post?.title || "Jacob Thoughts",
-    description:
-      data?.post?.subtitle ||
-      data?.post?.body?.split("\n")?.[0] ||
-      "Obligatory about page.",
+    title,
+    description,
+    "twitter:title": title,
+    "twitter:description": description,
+    "twitter:card": "summary",
+    "twitter:site": "@ebey_jacob",
+    "twitter:creator": "@ebey_jacob",
   };
 };
 
