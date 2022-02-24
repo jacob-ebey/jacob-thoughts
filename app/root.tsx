@@ -5,7 +5,7 @@ import { isLoggedIn } from "~/session.server";
 import globalStylesHref from "~/styles/global.css";
 
 export const meta: MetaFunction = () => {
-  return { title: "Jacob Thoughts" };
+  return { title: "Jacob Thoughts", description: "Come read my ramblings." };
 };
 
 export let links = () => [

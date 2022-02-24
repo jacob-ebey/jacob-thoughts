@@ -1,10 +1,20 @@
 import { json, redirect, useLoaderData, useSearchParams } from "remix";
-import type { ActionFunction, LoaderFunction } from "remix";
+import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
 import linkifyUrls from "linkify-urls";
 
 import { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
 import { isLoggedIn } from "~/session.server";
+
+export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
+  return {
+    title: data?.post?.title || "Jacob Thoughts",
+    description:
+      data?.post?.subtitle ||
+      data?.post?.body?.split("\n")?.[0] ||
+      "Obligatory about page.",
+  };
+};
 
 type LoaderData = {
   loggedIn: boolean;

@@ -1,4 +1,10 @@
+import type { MetaFunction } from "remix";
+
 import imgHref from "~/media/phuket-pool.jpg";
+
+export const meta: MetaFunction = () => {
+  return { title: "Jacob Thoughts", description: "Obligatory about page." };
+};
 
 export default function About() {
   return (
