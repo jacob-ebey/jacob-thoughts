@@ -6,6 +6,8 @@ import { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
 import { isLoggedIn } from "~/session.server";
 
+import imgHref from "~/media/phuket-pool.jpg";
+
 export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
   let title = data?.post?.title || "Jacob Thoughts";
   let description =
@@ -17,6 +19,7 @@ export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
     description,
     "twitter:title": title,
     "twitter:description": description,
+    "twitter:image": `https://jacobeby.com${imgHref}`,
     "twitter:card": "summary",
     "twitter:site": "@ebey_jacob",
     "twitter:creator": "@ebey_jacob",
