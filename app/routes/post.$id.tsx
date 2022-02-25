@@ -98,7 +98,7 @@ export function CatchBoundary() {
       <hgroup>
         <h1>Post not available</h1>
         <h2>
-          <a href="/">Back to all</a>
+          <a data-prefetch="intent" href="/">Back to all</a>
         </h2>
       </hgroup>
     </main>
@@ -112,7 +112,7 @@ export default function Post() {
   return (
     <main className="container">
       <p>
-        <a href="/">Back to all</a>
+        <a data-prefetch="intent" href="/">Back to all</a>
       </p>
 
       {loggedIn ? (

@@ -3,6 +3,7 @@ import type { LoaderFunction, MetaFunction } from "remix";
 
 import { isLoggedIn } from "~/session.server";
 import { getSeoLinks, getSeoMeta } from "~/seo";
+import { Turbolinks } from "~/remix-turbo-links";
 import globalStylesHref from "~/styles/global.css";
 
 export const meta: MetaFunction = () => {
@@ -53,12 +54,12 @@ export default function App() {
           </ul>
           <ul>
             <li>
-              <a href="/" className="contrast">
+              <a data-prefetch="intent" href="/" className="contrast">
                 Posts
               </a>
             </li>
             <li>
-              <a href="/about" className="contrast">
+              <a data-prefetch="intent" href="/about" className="contrast">
                 About
               </a>
             </li>
@@ -74,7 +75,7 @@ export default function App() {
             </li>
             {loggedIn && (
               <li>
-                <a href="/new" className="contrast">
+                <a data-prefetch="intent" href="/new" className="contrast">
                   New
                 </a>
               </li>
@@ -131,6 +132,7 @@ export default function App() {
             </a>
           </small>
         </footer>
+        <Turbolinks />
         <LiveReload />
       </body>
     </html>

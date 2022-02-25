@@ -52,7 +52,7 @@ export default function Index() {
               <hgroup>
                 <h1>
                   {post.title}{" "}
-                  <a href={`/post/${post.id}`} aria-label="permalink">
+                  <a data-prefetch="intent" href={`/post/${post.id}`} aria-label="permalink">
                     <svg height={36} width={36} fill="currentColor">
                       <use href={`${linkIconSvg}#link-icon`} />
                     </svg>
@@ -63,7 +63,7 @@ export default function Index() {
             ) : (
               <h1>
                 {post.title}{" "}
-                <a href={`/post/${post.id}`} aria-label="permalink">
+                <a data-prefetch="intent" href={`/post/${post.id}`} aria-label="permalink">
                   <svg height={36} width={36} fill="currentColor">
                     <use href={`${linkIconSvg}#link-icon`} />
                   </svg>
