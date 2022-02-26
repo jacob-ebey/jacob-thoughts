@@ -1,3 +1,7 @@
+.container {
+  word-break: break-word;
+}
+
 .error {
   color: var(--del-color);
 }
