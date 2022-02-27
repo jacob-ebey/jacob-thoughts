@@ -1,7 +1,7 @@
 let js = String.raw;
 
 export function PageViews({ metricsKey }: { metricsKey: string }) {
-  let callbackName = `${metricsKey.replace(/[\/-]/g, "_")}Callback`;
+  let callbackName = `${metricsKey.replace(/[\.\/-]/g, "_")}Callback`;
 
   return (
     <>
