@@ -82,8 +82,8 @@ export default function App() {
             )}
             {loggedIn && (
               <li>
-                <form method="post" action="/logout">
-                  <button type="submit" className="contrast link" role="link">
+                <form className="contents" method="post" action="/logout">
+                  <button type="submit" className="contrast" role="link">
                     Logout
                   </button>
                 </form>

@@ -10,6 +10,10 @@
   display: contents;
 }
 
+nav li {
+  word-break: normal;
+}
+
 [role="link"] {
   margin: 0;
   padding: 0;
