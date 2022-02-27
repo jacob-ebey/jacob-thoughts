@@ -38,6 +38,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Index() {
   let { posts, metricsKey } = useLoaderData<LoaderData>();
+  let metricsKeyBase = metricsKey?.split("/", 1)[0];
 
   return (
     <main className="container">
@@ -86,6 +87,9 @@ export default function Index() {
                   </svg>
                 </a>
               </h1>
+            )}
+            {!!metricsKey && (
+              <PageViews metricsKey={`${metricsKeyBase}/post-${post.id}`} />
             )}
             {post.body.split("\n").map((line, index) => (
               <p
