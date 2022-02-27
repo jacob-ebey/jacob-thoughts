@@ -6,6 +6,9 @@ import linkifyUrls from "linkify-urls";
 import type { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
 
+import { isLoggedIn } from "~/session.server";
+import { getMetricsKey } from "~/metrics.server";
+import { PageViews } from "~/components/page-views";
 import linkIconSvg from "~/media/link-icon.svg";
 
 export const headers: HeadersFunction = ({ actionHeaders }) => {
@@ -14,25 +17,31 @@ export const headers: HeadersFunction = ({ actionHeaders }) => {
 
 type LoaderData = {
   posts: Post[];
+  metricsKey?: string;
 };
 
-export const loader: LoaderFunction = async () => {
-  let posts = await prisma.post.findMany({
-    orderBy: {
-      id: "desc",
-    },
-  });
+export const loader: LoaderFunction = async ({ request }) => {
+  let [posts, loggedIn] = await Promise.all([
+    prisma.post.findMany({
+      orderBy: {
+        id: "desc",
+      },
+    }),
+    isLoggedIn(request, false),
+  ]);
 
   return json<LoaderData>({
     posts,
+    metricsKey: loggedIn ? await getMetricsKey(request) : undefined,
   });
 };
 
 export default function Index() {
-  let { posts } = useLoaderData<LoaderData>();
+  let { posts, metricsKey } = useLoaderData<LoaderData>();
 
   return (
     <main className="container">
+      {!!metricsKey && <PageViews metricsKey={metricsKey} />}
       {posts.length === 0 && (
         <hgroup>
           <h1>Nothing posted yet...</h1>
@@ -52,7 +61,11 @@ export default function Index() {
               <hgroup>
                 <h1>
                   {post.title}{" "}
-                  <a data-prefetch="intent" href={`/post/${post.id}`} aria-label="permalink">
+                  <a
+                    data-prefetch="intent"
+                    href={`/post/${post.id}`}
+                    aria-label="permalink"
+                  >
                     <svg height={36} width={36} fill="currentColor">
                       <use href={`${linkIconSvg}#link-icon`} />
                     </svg>
@@ -63,7 +76,11 @@ export default function Index() {
             ) : (
               <h1>
                 {post.title}{" "}
-                <a data-prefetch="intent" href={`/post/${post.id}`} aria-label="permalink">
+                <a
+                  data-prefetch="intent"
+                  href={`/post/${post.id}`}
+                  aria-label="permalink"
+                >
                   <svg height={36} width={36} fill="currentColor">
                     <use href={`${linkIconSvg}#link-icon`} />
                   </svg>

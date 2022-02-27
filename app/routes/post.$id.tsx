@@ -6,6 +6,8 @@ import { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
 import { isLoggedIn } from "~/session.server";
 import { getSeoMeta } from "~/seo";
+import { getMetricsKey } from "~/metrics.server";
+import { PageViews } from "~/components/page-views";
 
 export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
   let title = data?.post?.title || "Jacob Thoughts";
@@ -22,6 +24,7 @@ export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
 type LoaderData = {
   loggedIn: boolean;
   post: Post;
+  metricsKey?: string;
 };
 
 export let loader: LoaderFunction = async ({ request, params }) => {
@@ -41,6 +44,7 @@ export let loader: LoaderFunction = async ({ request, params }) => {
   return json<LoaderData>({
     loggedIn,
     post,
+    metricsKey: loggedIn ? await getMetricsKey(request) : undefined,
   });
 };
 
@@ -98,7 +102,9 @@ export function CatchBoundary() {
       <hgroup>
         <h1>Post not available</h1>
         <h2>
-          <a data-prefetch="intent" href="/">Back to all</a>
+          <a data-prefetch="intent" href="/">
+            Back to all
+          </a>
         </h2>
       </hgroup>
     </main>
@@ -106,19 +112,22 @@ export function CatchBoundary() {
 }
 
 export default function Post() {
-  let { loggedIn, post } = useLoaderData<LoaderData>();
+  let { loggedIn, post, metricsKey } = useLoaderData<LoaderData>();
   let [searchParams] = useSearchParams();
 
   return (
     <main className="container">
       <p>
-        <a data-prefetch="intent" href="/">Back to all</a>
+        <a data-prefetch="intent" href="/">
+          Back to all
+        </a>
       </p>
 
       {loggedIn ? (
         <section>
           <form method="post">
-            <h1>New Post</h1>
+            <h1>Edit Post</h1>
+            {!!metricsKey && <PageViews metricsKey={metricsKey} />}
             <label htmlFor="title">Title*</label>
             {searchParams.has("title-error") && (
               <output id="title-error" className="error">

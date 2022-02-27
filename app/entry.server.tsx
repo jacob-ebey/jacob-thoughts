@@ -1,6 +1,9 @@
 import { renderToString } from "react-dom/server";
 import { RemixServer } from "remix";
-import type { EntryContext, HandleDataRequestFunction } from "remix";
+import type { EntryContext } from "remix";
+
+import { pageView } from "~/metrics.server";
+import { isLoggedIn } from "~/session.server";
 
 export default function handleRequest(
   request: Request,
@@ -8,6 +11,10 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
+  isLoggedIn(request, false).then<false | void>(
+    (loggedIn) => !loggedIn && pageView(request)
+  );
+
   const markup = renderToString(
     <RemixServer context={remixContext} url={request.url} />
   );
@@ -22,13 +29,3 @@ export default function handleRequest(
     headers: responseHeaders,
   });
 }
-
-export const handleDataRequest: HandleDataRequestFunction = async (
-  response: Response
-) => {
-  if (process.env.FLY_REGION) {
-    response.headers.set("X-Fly-Region", process.env.FLY_REGION);
-  }
-
-  return response;
-};
