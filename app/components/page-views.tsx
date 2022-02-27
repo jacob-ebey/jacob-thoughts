@@ -16,7 +16,7 @@ export function PageViews({ metricsKey }: { metricsKey: string }) {
             function ${callbackName}(data) {
               document.getElementById(${JSON.stringify(
                 metricsKey
-              )}).innerText = "Total Views: " + data.value;
+              )}).innerText = "Total Views: " + data.value || 0;
             }
           `,
         }}
