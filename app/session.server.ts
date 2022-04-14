@@ -1,4 +1,4 @@
-import { createCookieSessionStorage, redirect } from "remix";
+import { createCookieSessionStorage, redirect } from "@remix-run/node";
 
 if (!process.env.COOKIE_SECRET) {
   throw new Error("COOKIE_SECRET environment variable is not set");

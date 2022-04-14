@@ -7,7 +7,22 @@ import * as serverBuild from "@remix-run/dev/server-build";
 
 const app = express();
 
-app.use(compression());
+app.use(
+  compression({
+    // TODO: Enable filter when deferred data is used
+    // filter(req, res) {
+    //   // No compression for html document requests to allow for streaming
+    //   let contentTypeHeader = res.getHeader("content-type");
+    //   let contentType = Array.isArray(contentTypeHeader)
+    //     ? contentTypeHeader.join(" ")
+    //     : contentTypeHeader;
+    //   if (contentType && `${contentType}`.includes("text/html")) {
+    //     return false;
+    //   }
+    //   return true;
+    // },
+  })
+);
 
 app.disable("x-powered-by");
 

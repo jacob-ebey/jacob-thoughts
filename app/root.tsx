@@ -1,9 +1,16 @@
-import { json, Links, LiveReload, Meta, Outlet, useLoaderData } from "remix";
-import type { LoaderFunction, MetaFunction } from "remix";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  useLoaderData,
+} from "@remix-run/react";
 
 import { isLoggedIn } from "~/session.server";
 import { getSeoLinks, getSeoMeta } from "~/seo";
-import { Turbolinks } from "~/remix-turbo-links";
 import globalStylesHref from "~/styles/global.css";
 
 export const meta: MetaFunction = () => {
@@ -132,8 +139,9 @@ export default function App() {
             </a>
           </small>
         </footer>
-        <Turbolinks />
+
         <LiveReload />
+        <Scripts vanilla />
       </body>
     </html>
   );

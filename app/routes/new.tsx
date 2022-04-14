@@ -1,5 +1,6 @@
-import { redirect, useSearchParams } from "remix";
-import type { ActionFunction, LoaderFunction } from "remix";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import { useSearchParams } from "@remix-run/react";
 import { isLoggedIn } from "~/session.server";
 
 import prisma from "~/prisma.server";

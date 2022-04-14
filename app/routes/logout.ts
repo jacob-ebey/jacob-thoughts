@@ -1,5 +1,5 @@
-import { redirect } from "remix";
-import type { ActionFunction } from "remix";
+import type { ActionFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 
 import { destroySession } from "~/session.server";
 

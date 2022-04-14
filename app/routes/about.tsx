@@ -1,9 +1,15 @@
-import type { MetaFunction } from "remix";
+import type { HeadersFunction, MetaFunction } from "@remix-run/node";
 
 import imgHref from "~/media/phuket-pool.jpg";
 
 export const meta: MetaFunction = () => {
   return { title: "Jacob Thoughts", description: "Obligatory about page." };
+};
+
+export const headers: HeadersFunction = () => {
+  let headers = new Headers();
+  headers.set("Cache-Control", "public, max-age=60");
+  return headers;
 };
 
 export default function About() {

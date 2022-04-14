@@ -1,4 +1,3 @@
-import { hydrate } from "react-dom";
-import { RemixBrowser } from "remix";
+import { initializeTurboLinks } from "./remix-turbo-links";
 
-hydrate(<RemixBrowser />, document);
+initializeTurboLinks();

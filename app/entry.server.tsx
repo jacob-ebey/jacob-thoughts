@@ -1,9 +1,11 @@
-import { renderToString } from "react-dom/server";
+import { PassThrough } from "stream";
+import { renderToPipeableStream } from "react-dom/server";
 import { RemixServer } from "remix";
 import type { EntryContext } from "remix";
+import { Response, Headers } from "@remix-run/node";
+import isbot from "isbot";
 
-import { pageView } from "~/metrics.server";
-import { isLoggedIn } from "~/session.server";
+const ABORT_DELAY = 5000;
 
 export default function handleRequest(
   request: Request,
@@ -11,21 +13,38 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
-  isLoggedIn(request, false).then<false | void>(
-    (loggedIn) => !loggedIn && pageView(request)
-  );
+  const callbackName = isbot(request.headers.get("user-agent"))
+    ? "onAllReady"
+    : "onShellReady";
 
-  const markup = renderToString(
-    <RemixServer context={remixContext} url={request.url} />
-  );
+  return new Promise((resolve, reject) => {
+    let didError = false;
 
-  responseHeaders.set("Content-Type", "text/html");
-  if (process.env.FLY_REGION) {
-    responseHeaders.set("X-Fly-Region", process.env.FLY_REGION);
-  }
+    const { pipe, abort } = renderToPipeableStream(
+      <RemixServer context={remixContext} url={request.url} />,
+      {
+        [callbackName]() {
+          let body = new PassThrough();
 
-  return new Response("<!DOCTYPE html>" + markup, {
-    status: responseStatusCode,
-    headers: responseHeaders,
+          responseHeaders.set("Content-Type", "text/html");
+
+          resolve(
+            new Response(body, {
+              status: didError ? 500 : responseStatusCode,
+              headers: responseHeaders,
+            })
+          );
+          pipe(body);
+        },
+        onShellError(err) {
+          reject(err);
+        },
+        onError(error) {
+          didError = true;
+          console.error(error);
+        },
+      }
+    );
+    setTimeout(abort, ABORT_DELAY);
   });
 }

@@ -1,5 +1,6 @@
-import { redirect, useSearchParams } from "remix";
-import type { ActionFunction } from "remix";
+import type { ActionFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
+import { useSearchParams } from "@remix-run/react";
 
 import { setLoggedIn } from "~/session.server";
 

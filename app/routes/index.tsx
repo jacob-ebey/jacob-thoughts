@@ -1,6 +1,7 @@
 import { Fragment } from "react";
-import { json, useLoaderData } from "remix";
-import type { HeadersFunction, LoaderFunction } from "remix";
+import type { HeadersFunction, LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import linkifyUrls from "linkify-urls";
 
 import type { Post } from "@prisma/client";
@@ -11,8 +12,12 @@ import { getMetricsKey } from "~/metrics.server";
 import { PageViews } from "~/components/page-views";
 import linkIconSvg from "~/media/link-icon.svg";
 
-export const headers: HeadersFunction = ({ actionHeaders }) => {
-  return actionHeaders;
+export const headers: HeadersFunction = ({ actionHeaders, loaderHeaders }) => {
+  let headers = new Headers(actionHeaders);
+  loaderHeaders.has("Cache-Control") &&
+    headers.set("Cache-Control", loaderHeaders.get("Cache-Control")!);
+
+  return headers;
 };
 
 type LoaderData = {
@@ -30,10 +35,19 @@ export const loader: LoaderFunction = async ({ request }) => {
     isLoggedIn(request, false),
   ]);
 
-  return json<LoaderData>({
-    posts,
-    metricsKey: loggedIn ? await getMetricsKey(request) : undefined,
-  });
+  return json<LoaderData>(
+    {
+      posts,
+      metricsKey: loggedIn ? await getMetricsKey(request) : undefined,
+    },
+    {
+      headers: {
+        "Cache-Control": loggedIn
+          ? "no-cache"
+          : "public, max-age=60",
+      },
+    }
+  );
 };
 
 export default function Index() {

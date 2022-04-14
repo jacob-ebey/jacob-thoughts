@@ -1,13 +1,25 @@
-import { json, redirect, useLoaderData, useSearchParams } from "remix";
-import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
+import type {
+  ActionFunction,
+  HeadersFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { useLoaderData, useSearchParams } from "@remix-run/react";
 import linkifyUrls from "linkify-urls";
 
-import { Post } from "@prisma/client";
+import type { Post } from "@prisma/client";
 import prisma from "~/prisma.server";
 import { isLoggedIn } from "~/session.server";
 import { getSeoMeta } from "~/seo";
 import { getMetricsKey } from "~/metrics.server";
 import { PageViews } from "~/components/page-views";
+
+export const headers: HeadersFunction = () => {
+  let headers = new Headers();
+  headers.set("Cache-Control", "public, max-age=60");
+  return headers;
+};
 
 export const meta: MetaFunction = ({ data }: { data?: LoaderData }) => {
   let title = data?.post?.title || "Jacob Thoughts";
@@ -111,7 +123,7 @@ export function CatchBoundary() {
   );
 }
 
-export default function Post() {
+export default function PostRoute() {
   let { loggedIn, post, metricsKey } = useLoaderData<LoaderData>();
   let [searchParams] = useSearchParams();
 
