@@ -5,7 +5,7 @@
   "license": "",
   "sideEffects": false,
   "scripts": {
-    "postinstall": "patch-package && npx prisma generate && remix setup node",
+    "postinstall": "patch-package && npx prisma generate",
     "build": "cross-env NODE_ENV=production remix build",
     "dev": "cross-env NODE_ENV=development remix build && run-p dev:*",
     "dev:node": "dotenv -- nodemon ./build/index.js",
