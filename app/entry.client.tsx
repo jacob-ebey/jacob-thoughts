@@ -1,3 +1,4 @@
-import { initializeTurboLinks } from "./remix-turbo-links";
+import { hydrateRoot } from "react-dom/client";
+import { RemixBrowser } from "@remix-run/react";
 
-initializeTurboLinks();
+hydrateRoot(document, <RemixBrowser />);

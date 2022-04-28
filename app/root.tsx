@@ -5,13 +5,14 @@ import {
   LiveReload,
   Meta,
   Outlet,
-  Scripts,
   useLoaderData,
 } from "@remix-run/react";
 
 import { isLoggedIn } from "~/session.server";
 import { getSeoLinks, getSeoMeta } from "~/seo";
 import globalStylesHref from "~/styles/global.css";
+
+import { initializeTurboLinks } from "./remix-turbo-links";
 
 export const meta: MetaFunction = () => {
   return getSeoMeta();
@@ -31,16 +32,20 @@ export let links = () => [
 
 type LoaderData = {
   loggedIn: boolean;
+  initializeTurboLinks: string;
 };
 
 export let loader: LoaderFunction = async ({ request }) => {
   let loggedIn = await isLoggedIn(request, false);
 
-  return json<LoaderData>({ loggedIn });
+  return json<LoaderData>({
+    loggedIn,
+    initializeTurboLinks: initializeTurboLinks.toString(),
+  });
 };
 
 export default function App() {
-  let { loggedIn } = useLoaderData<LoaderData>();
+  let { loggedIn, initializeTurboLinks } = useLoaderData<LoaderData>();
 
   return (
     <html lang="en" data-theme="light">
@@ -140,8 +145,10 @@ export default function App() {
           </small>
         </footer>
 
+        <script
+          dangerouslySetInnerHTML={{ __html: `(${initializeTurboLinks})();` }}
+        />
         <LiveReload />
-        <Scripts vanilla />
       </body>
     </html>
   );
